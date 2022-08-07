@@ -1,6 +1,7 @@
-"""Tests for the user API."""
+"""
+Tests for the user API.
+"""
 
-from tokenize import Token
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -27,7 +28,7 @@ class PublicUserApiTests(TestCase):
     def test_create_user_success(self):
         """Test creating a user is successful."""
         payload = {
-            'email': 'teste@example.com',
+            'email': 'test@example.com',
             'password': 'testpass123',
             'name': 'Test Name',
         }
@@ -41,7 +42,7 @@ class PublicUserApiTests(TestCase):
     def test_user_with_email_exists_error(self):
         """Test error returned if user with email exists."""
         payload = {
-            'email': 'teste@example.com',
+            'email': 'test@example.com',
             'password': 'testpass123',
             'name': 'Test Name',
         }
@@ -53,9 +54,9 @@ class PublicUserApiTests(TestCase):
     def test_password_too_short_error(self):
         """Test an error is returned if password less than 5 chars."""
         payload = {
-            'email': 'teste@example.com',
+            'email': 'test@example.com',
             'password': 'pw',
-            'name': 'Test Name',
+            'name': 'Test name',
         }
         res = self.client.post(CREATE_USER_URL, payload)
 
@@ -66,10 +67,10 @@ class PublicUserApiTests(TestCase):
         self.assertFalse(user_exists)
 
     def test_create_token_for_user(self):
-        """Test genrates token for valid credentials."""
+        """Test generates token for valid credentials."""
         user_details = {
             'name': 'Test Name',
-            'email':' test@example.com',
+            'email': 'test@example.com',
             'password': 'test-user-password123',
         }
         create_user(**user_details)
@@ -81,13 +82,13 @@ class PublicUserApiTests(TestCase):
         res = self.client.post(TOKEN_URL, payload)
 
         self.assertIn('token', res.data)
-        self.assertEqual(res.status_code,status.HTTP_200_OK)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def test_create_token_bad_credentials(self):
         """Test returns error if credentials invalid."""
         create_user(email='test@example.com', password='goodpass')
 
-        payload = {'email': 'test@exmaple.com', 'password': 'badpass'}
+        payload = {'email': 'test@example.com', 'password': 'badpass'}
         res = self.client.post(TOKEN_URL, payload)
 
         self.assertNotIn('token', res.data)
@@ -112,13 +113,13 @@ class PrivateUserApiTests(TestCase):
 
     def setUp(self):
         self.user = create_user(
-            email='test@exmaple.com',
+            email='test@example.com',
             password='testpass123',
             name='Test Name',
         )
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
-    
+
     def test_retrieve_profile_success(self):
         """Test retrieving profile for logged in user."""
         res = self.client.get(ME_URL)
@@ -145,4 +146,3 @@ class PrivateUserApiTests(TestCase):
         self.assertEqual(self.user.name, payload['name'])
         self.assertTrue(self.user.check_password(payload['password']))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        
