@@ -9,7 +9,7 @@ from core import models
 
 
 class UserAdmin(BaseUserAdmin):
-    """Define the admin pages fro users."""
+    """Define the admin pages for users."""
     ordering = ['id']
     list_display = ['email', 'name']
     fieldsets = (
@@ -17,14 +17,14 @@ class UserAdmin(BaseUserAdmin):
         (
             _('Permissions'),
             {
-                'fields':(
+                'fields': (
                     'is_active',
                     'is_staff',
                     'is_superuser',
                 )
             }
         ),
-        (_('Important dates'), {'fields':('last_login',)}),
+        (_('Important dates'), {'fields': ('last_login',)}),
     )
     readonly_fields = ['last_login']
 
