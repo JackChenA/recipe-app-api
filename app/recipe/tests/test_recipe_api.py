@@ -1,5 +1,5 @@
 """
-Tests for recipe APIs
+Tests for recipe APIs.
 """
 from decimal import Decimal
 
@@ -9,7 +9,6 @@ from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.test import APIClient
-from yaml import serialize
 
 from core.models import Recipe
 
@@ -57,8 +56,8 @@ class PrivateRecipeApiTests(TestCase):
         )
         self.client.force_authenticate(user=self.user)
 
-    def test_retrive_recipes(self):
-        """Test retriving a list of recipes."""
+    def test_retrieve_recipes(self):
+        """Test retrieving a list of recipes."""
         create_recipe(user=self.user)
         create_recipe(user=self.user)
 
